@@ -1,11 +1,13 @@
 from django.contrib import messages
 from django.shortcuts import render, redirect
 from django.views.generic import View
-from .forms import RegistrationForm, LoginForm
+from .forms import RegistrationForm, LoginForm, ProfileForm
 from django.contrib.auth import login, logout, authenticate
+from django.contrib.auth.mixins import LoginRequiredMixin
+from config.mixins import LogoutRequiredMixin
 
 
-class RegistrationView(View):
+class RegistrationView(LogoutRequiredMixin, View):
     def setup(self, request, *args, **kwargs):
         super().setup(request, *args, **kwargs)
 
@@ -30,7 +32,7 @@ class RegistrationView(View):
         })
 
 
-class LoginView(View):
+class LoginView(LogoutRequiredMixin, View):
     def setup(self, request, *args, **kwargs):
         super().setup(request, *args, **kwargs)
 
@@ -48,8 +50,26 @@ class LoginView(View):
             if user is not None:
                 login(request, user)
                 messages.success(request, "{} xush kelibsiz".format(user.get_short_name()))
+                return redirect('articles:index')
         form.add_error('password', "Login va/yoki parol xato!!!")
 
         return render(request, 'user/login.html', {
             'form': form
         })
+
+class LogoutView(LoginRequiredMixin, View):
+    def get(self, request):
+        logout(request)
+        messages.info(request, 'Kelib turing!!')
+        return redirect('articles:index')
+
+
+
+class ProfileView(LogoutRequiredMixin, View):
+    def get(self, request):
+        return render(request, 'user/profile.html', {
+            'form': ProfileForm(instance=request.user)
+        })
+
+    def post(self, request):
+        pass

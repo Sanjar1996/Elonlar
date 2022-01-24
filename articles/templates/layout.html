@@ -20,12 +20,21 @@
         </button>
         <div class="collapse navbar-collapse" id="id_navbar">
             <ul class="navbar-nav ml-auto">
-                <li class="nav-item {% if crn == 'user:registration' %} active  {% endif %}">
-                    <a href="{% url 'user:registration' %}" style="color: white;">Registratsiya</a>
-                </li>
-                <li class="nav-item {% if crn == 'user:login' %} active  {% endif %}">
-                    <a href="{% url 'user:login' %}" style="color: white;">Tizimga kirish </a>
-                </li>
+                {% if user.is_authenticated %}
+                    <li class="nav-item {% if crn == 'user:profile' %} active {% endif %}">
+                        <a href="{% url 'user:profile' %}" style="color: white;">{{ user.username }}</a>
+                    </li>
+                    <li class="nav-item {% if crn == 'user:logout' %} active {% endif %}">
+                        <a href="{% url 'user:logout' %}" style="color: white;">Chiqish</a>
+                    </li>
+                {% else %}
+                    <li class="nav-item {% if crn == 'user:registration' %} active {% endif %}">
+                        <a href="{% url 'user:registration' %}" style="color: white;">Registratsiya</a>
+                    </li>
+                    <li class="nav-item {% if crn == 'user:login' %} active {% endif %}">
+                        <a href="{% url 'user:login' %}" style="color: white;">Tizimga kirish </a>
+                    </li>
+                {% endif %}
             </ul>
         </div>
     </div>
