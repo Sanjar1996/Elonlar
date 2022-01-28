@@ -66,6 +66,12 @@ class LogoutView(LoginRequiredMixin, View):
 
 
 class ProfileView(LogoutRequiredMixin, View):
+
+    def setup(self, request, *args, **kwargs):
+        super().setup(request, *args, **kwargs)
+
+        request.title = "Profil"
+
     def get(self, request):
         return render(request, 'user/profile.html', {
             'form': ProfileForm(instance=request.user)

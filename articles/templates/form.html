@@ -9,7 +9,7 @@
                     <form action="{% block url %}{% endblock %}" method="post">
                         {% csrf_token %}
                         {{ form | crispy }}
-                        <button type="submit" class="btn btn-danger mt-3">{{ request.title }}</button>
+                        <button type="submit" class="btn btn-info mt-3">{{ request.title }}</button>
                     </form>
                 </div>
             </div>
